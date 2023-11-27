@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Livros</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Livraria Fantástica</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="#">Livros</a></li>
+                <li><a href="#">Autores</a></li>
+                <li><a href="#">Contato</a></li>
+                <li><a href="cadastro.html">Cadastro</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="container">
+            <form>
+                <fieldset>
+                    <legend>Selecione o livro</legend>
+
+                    <div class="input-container">
+                        <label for="livro">Escolha o livro</label>
+                        <select name="livro" id="livro" required>
+                            <option value="">Selecione</option>
+                            <option value="Avengers">Avengers</option>
+                            <option value="Champions">Champions</option>
+                            <option value="Thanos">Thanos</option>
+                            <option value="Spider-man: Miles Morales">Spider-man: Miles Morales</option>
+                            <option value="Desafio infinito">Desafio infinito</option>
+                            <option value="X-men">X-men</option>
+                        </select>
+                    </div>
+
+                    <div class="input-container">
+                        <label for="quantidade">Selecione a quantidade</label>
+                        <input type="number" name="quantidade" id="quantidade" required>
+                    </div>
+                    <div class="actions">
+                            <button type="submit"><a href="dados.html">Comprar</a></button>
+                            <button type="reset">Limpar</button>
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Livraria Fantástica | Criado por Daniel Marcon</p>
+    </footer>
+</body>
+
+</html>
