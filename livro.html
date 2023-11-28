@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Livros</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+
 </head>
 
 <body>
@@ -23,34 +25,151 @@
     </header>
     <main>
         <section class="container">
-            <form>
-                <fieldset>
-                    <legend>Selecione o livro</legend>
+            <form id="meuForm" action="http://jkorpela.fi/cgi-bin/echo.cgi" method="post">
 
-                    <div class="input-container">
-                        <label for="livro">Escolha o livro</label>
-                        <select name="livro" id="livro" required>
-                            <option value="">Selecione</option>
-                            <option value="Avengers">Avengers</option>
-                            <option value="Champions">Champions</option>
-                            <option value="Thanos">Thanos</option>
-                            <option value="Spider-man: Miles Morales">Spider-man: Miles Morales</option>
-                            <option value="Desafio infinito">Desafio infinito</option>
-                            <option value="X-men">X-men</option>
-                        </select>
-                    </div>
+                <div>
+                    <label for="livro">Escolha o livro</label>
+                    <select name="livro" required id="idLivro">
+                        <option disabled selected hidden value="">Selecione</option>
+                        <option value="Avengers">Avengers</option>
+                        <option value="Champions">Champions</option>
+                        <option value="Thanos">Thanos</option>
+                    </select>
+                </div>
 
-                    <div class="input-container">
-                        <label for="quantidade">Selecione a quantidade</label>
-                        <input type="number" name="quantidade" id="quantidade" required>
-                    </div>
-                    <div class="actions">
-                            <button type="submit"><a href="dados.html">Comprar</a></button>
-                            <button type="reset">Limpar</button>
-                    </div>
-                </fieldset>
+                <label for="quantidade">Selecione a quantidade</label>
+                <input type="number" name="quantidade" id="idQuantidade" required value="1" placeholder="0">
+
+                <label for="nome">Nome do Cliente:</label>
+                <input type="text" id="nome" name="nome" required value="pessoa">
+
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="###.###.###-##"
+                    required value="123.123.123-11">
+
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" required value="nada@nada.com">
+
+
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" pattern="\(\d{2}\) \d{4,5}-\d{4}"
+                    placeholder="(XX) XXXXX-XXXX" required value="(99) 12345-6789">
+
+
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" name="cep" pattern="\d{5}-\d{3}" placeholder="XXXXX-XXX" required
+                    value="12345-000">
+
+
+
+                <button type="button" onclick="validarFormulario()">Enviar</button>
             </form>
+
+
+            <script>
+                var produto = "0"
+                function validarFormulario() {
+
+
+                    const cpfInput = document.getElementById('cpf');
+                    const cpfRegex = /\d{3}\.\d{3}\.\d{3}-\d{2}/;
+                    if (!cpfRegex.test(cpfInput.value)) {
+                        alert("Cpf invalido")
+                        return;
+                    }
+
+                    const emailInput = document.getElementById('email');
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(emailInput.value)) {
+                        alert("Email invalido")
+                        return;
+                    }
+
+
+                    const telefoneInput = document.getElementById('telefone');
+                    const telefoneRegex = /\(\d{2}\) \d{4,5}-\d{4}/;
+                    if (!telefoneRegex.test(telefoneInput.value)) {
+                        alert("Telefone invalido")
+                        return;
+                    }
+
+
+                    const cepInput = document.getElementById('cep');
+                    const cepRegex = /\d{5}-\d{3}/;
+                    if (!cepRegex.test(cepInput.value)) {
+                        alert("Cep invalido")
+                        return;
+                    }
+
+                    var quantidade = gebi("idQuantidade").value;
+                    var livro = gebi("idLivro").value;
+
+
+                    if ((livro === "Avengers")) {
+                        var produto = "0"
+                    }
+
+                    if ((livro === "Champions")) {
+                        var produto = "1"
+                    }
+
+                    if ((livro === "Thanos")) {
+                        var produto = "2"
+                    }
+
+                    var preços = [5, 10, 15];
+
+                    var valor = preços[(produto)] * quantidade
+
+                    function obterHistoricoVendas() {
+                        return JSON.parse(localStorage.getItem('historicoVendas')) || [];
+                    }
+
+                    function adicionarVendaAoHistorico(quantidade) {
+
+                        var historicoVendas = obterHistoricoVendas();
+
+                        historicoVendas.push({ quantidade });
+
+                        localStorage.setItem('historicoVendas', JSON.stringify(historicoVendas));
+                    }
+
+                    adicionarVendaAoHistorico(quantidade);
+
+                    function exibirItensHistorico() {
+
+                        var historicoVendas = obterHistoricoVendas();
+
+
+                        console.log("Histórico de Vendas:");
+
+                        historicoVendas.forEach(function (venda, index) {
+                            console.log(`Venda ${index + 1}:`);
+                            console.log(`Quantidade: ${venda.quantidade}`);
+                            console.log("------------------------");
+                        });
+                    }
+
+                    exibirItensHistorico();
+
+                    alert("Você comprou " + quantidade + " " + livro + " " + "no valor de " + valor + " reais!")
+
+                    alert('Formulário enviado com sucesso!');
+
+                    gebi("meuForm").submit()
+                }
+                function calcularTotal() {
+                    var historicoVendas = obterHistoricoVendas();
+                    var total = historicoVendas.reduce(function (acumulador, venda) {
+                        return acumulador + venda.quantidade;
+                    }, 0);
+                    console.log("Total de Vendas:", total);
+                }
+
+            </script>
         </section>
+        <button type="button" onclick="calcularTotal()">Calcular Total de Vendas</button>
     </main>
     <footer>
         <p>&copy; 2023 Livraria Fantástica | Criado por Daniel Marcon</p>
